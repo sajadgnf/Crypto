@@ -1,5 +1,5 @@
 .container {
-    margin: 50px auto;
+    margin: 50px auto 0;
     border: 1px silver solid;
     border-radius: 10px;
     width: fit-content;
@@ -21,4 +21,8 @@
     border-color: #fff;
     background-color: #fff;
     box-shadow: rgba(74, 74, 74, 0.24) 0 3px 8px;
+}
+
+.paginateContainer{
+    margin: 20px 0 50px;
 }

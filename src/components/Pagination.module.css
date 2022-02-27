@@ -1,0 +1,33 @@
+.paginateContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background: #8bcbf9;
+    margin: 0 5px;
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease; 
+} 
+
+.activeButton {
+    background: #063251;
+    color: rgb(255, 255, 255);
+}
+
+.prev,
+.next {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}

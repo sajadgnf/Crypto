@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react'
 import Coin from './Coin'
 import Loarder from "./Loader"
 
+// funciton
+import Pagination from './Pagination'
+
 // api
 import { getCoin } from '../services/api'
 
@@ -13,6 +16,8 @@ import styles from "./Landing.module.css"
 const Landing = () => {
     const [coins, setCoins] = useState([])
     const [search, setSearch] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const [coinsPerPage, setCoinsPerPage] = useState(20)
 
     useEffect(() => {
         const fetchAPI = async () => {
@@ -28,22 +33,60 @@ const Landing = () => {
 
     const searchCoins = coins.filter(coin => coin.name.toLowerCase().includes(search.toLowerCase()))
 
+    const indexOfLastPage = currentPage * coinsPerPage
+    const indexOfFirstPage = indexOfLastPage - coinsPerPage
+    const currentCoins = searchCoins.slice(indexOfFirstPage, indexOfLastPage)
+
+    const paginate = pageNumber => setCurrentPage(pageNumber)
+
+    const changePage = (event, number) => {
+        if (event.target.classList.contains("prev")) {
+            setCurrentPage((oldPage) => {
+                let prevPage = oldPage - 1
+                if (prevPage < 1) {
+                    prevPage = number
+                }
+                return prevPage
+            })
+        }
+        else {
+            setCurrentPage((oldPage) => {
+                let nextPage = oldPage + 1
+                if (nextPage > number) {
+                    nextPage = 1
+                }
+                return nextPage
+            })
+        }
+    }
+
     return (
         <>
             <input className={styles.search} type="text" placeholder="Search" value={search} onChange={searchHnadler} />
             {
                 coins.length ?
-                    <div className={styles.container}>
-                        {
-                            searchCoins.map(coin => <Coin key={coin.id}
-                                image={coin.image}
-                                name={coin.name}
-                                price={coin.current_price}
-                                symbol={coin.symbol}
-                                marketCap={coin.market_cap}
-                                priceChanges={coin.market_cap_change_percentage_24h}
-                            />)
-                        }
+                    <div>
+                        <div className={styles.container}>
+                            {
+                                currentCoins.map(coin => <Coin key={coin.id}
+                                    image={coin.image}
+                                    name={coin.name}
+                                    price={coin.current_price}
+                                    symbol={coin.symbol}
+                                    marketCap={coin.market_cap}
+                                    priceChanges={coin.market_cap_change_percentage_24h}
+                                />)
+                            }
+                        </div>
+                        <div className={styles.paginateContainer}>
+                            <Pagination
+                                totalCoins={searchCoins.length}
+                                coinsPerPage={coinsPerPage}
+                                currentPage={currentPage}
+                                paginate={paginate}
+                                changePage={changePage}
+                            />
+                        </div>
                     </div> :
                     <Loarder />
             }
